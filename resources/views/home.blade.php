@@ -15,6 +15,18 @@
 
 <body>
     @include('navbar')
+    @if (session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if (session()->has('loginError'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('loginError') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     @yield('container')
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"

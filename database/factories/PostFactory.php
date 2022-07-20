@@ -18,7 +18,7 @@ class PostFactory extends Factory
     {
         return [
             'body' => $this->faker->paragraph(mt_rand(5,10)),
-            'user_id' => mt_rand(1,3)
+            'user_id' => \App\Models\User::get()->random()->id
         ];
     }
 }

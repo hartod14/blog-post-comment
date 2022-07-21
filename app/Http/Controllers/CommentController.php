@@ -23,7 +23,6 @@ class CommentController extends Controller
             "title" => "All Comments",
             "comments" => Comment::get()
         ]);
-        
     }
 
     /**
@@ -42,29 +41,17 @@ class CommentController extends Controller
      * @param  \App\Http\Requests\StoreCommentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCommentRequest $request)
     { {
-            $input = $request->all();
+            // $input = $request->all();
 
-            $request -> validate([
-                'body' => 'required',
-            ]);
+            // $request->validated();
 
-            $input['user_id'] = auth()->user()->id;
+            // $input['user_id'] = auth()->user()->id;
 
-            Comment::create($input);
+            Comment::create($request->validated());
 
             return redirect()->back();
-
-            // $validatedData = $request->validate([
-            //     'body' => 'required',
-            // ]);
-    
-            // $validatedData['user_id'] = auth()->user()->id;
-    
-            // Comment::create($validatedData);
-    
-            // return redirect('/home');
         }
     }
 

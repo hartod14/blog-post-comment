@@ -17,8 +17,6 @@ class PostController extends Controller
             "title" => "All Posts",
             "posts" => Post::latest()->get()
         ]);
-
-
     }
 
     /**
@@ -37,17 +35,11 @@ class PostController extends Controller
      * @param  \App\Http\Requests\StorePostRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        $validatedData = $request->validate([
-            'body' => 'required'
-        ]);
+        Post::create($request->validated());
 
-        $validatedData['user_id'] = auth()->user()->id;
-
-        Post::create($validatedData);
-
-        return redirect('/home')->with('success', 'New Post has been added!');
+        return redirect('/')->with('success', 'New Post has been added!');
     }
 
     /**

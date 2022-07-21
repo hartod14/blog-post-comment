@@ -17,8 +17,8 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/home', [PostController::class, 'index']);
-Route::post('/home', [PostController::class, 'store'])->middleware('auth');
+Route::get('/', [PostController::class, 'index']);
+Route::post('/', [PostController::class, 'store'])->middleware('auth');
 Route::post('comment', [CommentController::class, 'store'])->name('comment.store')->middleware('auth');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');

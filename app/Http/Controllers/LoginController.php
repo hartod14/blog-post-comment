@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreLoginRequest;
 use Illuminate\Support\Facades\Auth;
+
 
 class LoginController extends Controller
 {
@@ -14,17 +16,15 @@ class LoginController extends Controller
         ]);
     }
 
-    public function authenticate(Request $request)
+    public function authenticate(StoreLoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/home');
+            return redirect()->intended('/');
         }
+        
         return back()->with('loginError', 'Login Failed');
     }
 

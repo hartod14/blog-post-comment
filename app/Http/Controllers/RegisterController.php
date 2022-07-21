@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\StoreRegisterRequest;
 
 class RegisterController extends Controller
 {
@@ -14,17 +14,13 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreRegisterRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|unique:users',
-            'password' => 'required|min:5|max:255'
-        ]);
+        $validated = $request->validated();
 
-        $validatedData['password'] = bcrypt($validatedData['password']);
-
-        User::Create($validatedData);
+        $validated['password'] = bcrypt($validated['password']);
+        
+        User::Create($validated);
 
         return redirect('/login')->with('success','Register has been completed! Please Login');
     }

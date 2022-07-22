@@ -21,10 +21,10 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return view('comment', [
-            "title" => "All Comments",
-            "comments" => Comment::get()
-        ]);
+        // return view('posts', [
+        //     "title" => "All Comments",
+        //     "comments" => Comment::with(['user', 'post'])->get()
+        // ]);
     }
 
     /**
@@ -53,13 +53,12 @@ class CommentController extends Controller
 
         try {
             DB::beginTransaction();
-            $input = $request->all();
-            
-            $request->validated();
 
-            $input['user_id'] = auth()->user()->id;
+            $validated = $request->validated();
 
-            Comment::create($input);
+            $validated['user_id'] = auth()->user()->id;
+
+            Comment::create($validated);
 
             DB::commit();
             // Comment::create($request->validated());

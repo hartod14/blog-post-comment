@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\User;
-use App\Models\Category;
+use App\Models\Comment;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
@@ -16,11 +15,13 @@ class PostController extends Controller
     {
         return view('posts', [
             "title" => "All Posts",
-            "posts" => Post::latest()->get()
+            "posts" => Post::with(['user', 'comments'])->latest()->get(),
+            "comments" => Comment::with('user')->get()
+            // "comments" => Comment::with(['user', 'post'])->get()
         ]);
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -44,10 +45,10 @@ class PostController extends Controller
 
             $validated['user_id'] = auth()->user()->id;
 
+            DB::commit();
+
             Post::create($validated);
             // Post::create($request->validated());
-
-            DB::commit();
         } catch (\Throwable $e) {
             DB::rollback();
 
@@ -65,8 +66,9 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        // return view('posts',[
-        //     "posts" => $post
+        // return view('posts', [
+        //     "title" => "All Comments",
+        //     "comments" => $comments
         // ]);
     }
 

@@ -17,7 +17,6 @@ class PostController extends Controller
             "title" => "All Posts",
             "posts" => Post::with(['user', 'comments'])->latest()->get(),
             "comments" => Comment::with('user')->get()
-            // "comments" => Comment::with(['user', 'post'])->get()
         ]);
     }
 

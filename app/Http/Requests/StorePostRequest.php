@@ -13,7 +13,6 @@ class StorePostRequest extends FormRequest
      */
     public function authorize()
     {
-        // return $this->user()->can('store');
         return true;
     }
 
@@ -26,7 +25,6 @@ class StorePostRequest extends FormRequest
     {
         return [
             'body' => 'required',
-            'user_id' => 'required'
         ];
     }
 }

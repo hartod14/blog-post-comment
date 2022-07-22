@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -37,8 +38,22 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        Post::create($request->validated());
+        try {
+            DB::beginTransaction();
+            $validated = $request->validated();
 
+            $validated['user_id'] = auth()->user()->id;
+
+            Post::create($validated);
+            // Post::create($request->validated());
+
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollback();
+
+            return redirect()->back()->with('error', 'Failed To Update Post');
+            // return redirect()->back()->with('error', $e->getMessage());
+        }
         return redirect('/')->with('success', 'New Post has been added!');
     }
 

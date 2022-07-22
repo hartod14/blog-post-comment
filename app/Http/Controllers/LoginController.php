@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreLoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class LoginController extends Controller
@@ -22,10 +23,10 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->intended('/')->with('success', 'Login Success');
         }
-        
-        return back()->with('loginError', 'Login Failed');
+
+        return back()->with('error', 'Login Failed');
     }
 
     public function logout(Request $request)

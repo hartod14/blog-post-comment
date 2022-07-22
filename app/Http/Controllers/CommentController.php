@@ -9,6 +9,8 @@ use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class CommentController extends Controller
 {
@@ -42,17 +44,31 @@ class CommentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCommentRequest $request)
-    { {
-            // $input = $request->all();
+    {
+        // $input = $request->all();
 
-            // $request->validated();
+        // $request->validated();
 
-            // $input['user_id'] = auth()->user()->id;
+        // $input['user_id'] = auth()->user()->id;
 
-            Comment::create($request->validated());
+        try {
+            DB::beginTransaction();
+            $input = $request->all();
+            
+            $request->validated();
 
-            return redirect()->back();
+            $input['user_id'] = auth()->user()->id;
+
+            Comment::create($input);
+
+            DB::commit();
+            // Comment::create($request->validated());
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', $e->getMessage());
         }
+
+        return redirect()->back();
     }
 
     /**
